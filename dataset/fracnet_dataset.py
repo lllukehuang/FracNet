@@ -132,8 +132,8 @@ class FracNetTrainDataset(Dataset):
     def __getitem__(self, idx):
         # read image and label
         public_id = self.public_id_list[idx]
-        image_path = os.path.join(self.image_dir, f"{public_id}-image.nii.gz")
-        label_path = os.path.join(self.label_dir, f"{public_id}-label.nii.gz")
+        image_path = os.path.join(self.image_dir, f"{public_id}-image.nii")
+        label_path = os.path.join(self.label_dir, f"{public_id}-label.nii")
         image = nib.load(image_path)
         label = nib.load(label_path)
         image_arr = image.get_fdata().astype(np.float)
