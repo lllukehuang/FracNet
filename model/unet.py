@@ -10,9 +10,11 @@ class UNet(nn.Module):
         self.down1 = Down(in_channels, 2 * in_channels)
         self.down2 = Down(2 * in_channels, 4 * in_channels)
         self.down3 = Down(4 * in_channels, 8 * in_channels)
-        self.up1   = Up(8 * in_channels, 4 * in_channels)
-        self.up2   = Up(4 * in_channels, 2 * in_channels)
-        self.up3   = Up(2 * in_channels, in_channels)
+        self.down4 = Down(8 * in_channels, 16 * in_channels)
+        self.up1   = Up(16 * in_channels, 8 * in_channels)
+        self.up2   = Up(8 * in_channels, 4 * in_channels)
+        self.up3   = Up(4 * in_channels, 2 * in_channels)
+        self.up4 = Up(2 * in_channels, in_channels)
         self.final = nn.Conv3d(in_channels, num_classes, 1)
 
         for m in self.modules():
@@ -27,9 +29,11 @@ class UNet(nn.Module):
         x2 = self.down1(x1)
         x3 = self.down2(x2)
         x4 = self.down3(x3)
-        x  = self.up1(x4, x3)
-        x  = self.up2(x, x2)
-        x  = self.up3(x, x1)
+        x5 = self.down4(x4)
+        x  = self.up1(x5, x4)
+        x  = self.up2(x, x3)
+        x  = self.up3(x, x2)
+        x = self.up4(x, x1)
         x  = self.final(x)
         return x
 
