@@ -31,7 +31,7 @@ def main(args):
     fbeta_score_partial = partial(fbeta_score, thresh=thresh)
 
     model = UNet(1, 1, first_out_channels=16)
-    model = nn.DataParallel(model.cuda())
+    model = nn.DataParallel(model,device_ids=[0])
 
     transforms = [
         tsfm.Window(-200, 1000),
@@ -75,13 +75,13 @@ if __name__ == "__main__":
     import argparse
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--train_image_dir", default='/kaggle/input/mlimg',
+    parser.add_argument("--train_image_dir", default='../ML2021/dataset/train/ct',
         help="The training image nii directory.")
-    parser.add_argument("--train_label_dir", default='/kaggle/input/mllabel',
+    parser.add_argument("--train_label_dir", default='../ML2021/dataset/train/label',
         help="The training label nii directory.")
-    parser.add_argument("--val_image_dir", default='/kaggle/input/mlvalimg',
+    parser.add_argument("--val_image_dir", default='../ML2021/dataset/val/ct',
         help="The validation image nii directory.")
-    parser.add_argument("--val_label_dir", default='/kaggle/input/mlvallabel',
+    parser.add_argument("--val_label_dir", default='../ML2021/dataset/val/label',
         help="The validation label nii directory.")
     # parser.add_argument("--train_image_dir", default='dataset/mlimg',
     #                     help="The training image nii directory.")
