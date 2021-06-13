@@ -74,7 +74,6 @@ def main(args):
 if __name__ == "__main__":
     import argparse
 
-
     parser = argparse.ArgumentParser()
     parser.add_argument("--train_image_dir", default='/kaggle/input/mlimg',
         help="The training image nii directory.")

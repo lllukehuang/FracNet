@@ -168,12 +168,18 @@ if __name__ == "__main__":
     size_thresh = 100
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--image_dir", required=True,
-        help="The image nii directory.")
-    parser.add_argument("--pred_dir", required=True,
-        help="The directory for saving predictions.")
-    parser.add_argument("--model_path", default=None,
-        help="The PyTorch model weight path.")
+    # parser.add_argument("--image_dir", required=True,
+    #     help="The image nii directory.")
+    # parser.add_argument("--pred_dir", required=True,
+    #     help="The directory for saving predictions.")
+    # parser.add_argument("--model_path", default=None,
+    #     help="The PyTorch model weight path.")
+    parser.add_argument("--image_dir", default= '/kaggle/input/mlimg',
+                        help="The image nii directory.")
+    parser.add_argument("--pred_dir", default='/kaggle/output/pred',
+                        help="The directory for saving predictions.")
+    parser.add_argument("--model_path", default='model_weights.pth',
+                        help="The PyTorch model weight path.")
     parser.add_argument("--prob_thresh", default=0.1,
         help="Prediction probability threshold.")
     parser.add_argument("--bone_thresh", default=300,
