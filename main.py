@@ -58,7 +58,7 @@ def main(args):
     )
 
     learn.fit_one_cycle(
-        200,
+        20,
         1e-1,
         pct_start=0,
         div_factor=1000,
@@ -92,7 +92,7 @@ if __name__ == "__main__":
     #                     help="The validation image nii directory.")
     # parser.add_argument("--val_label_dir", default='dataset/mlvallabel',
     #                     help="The validation label nii directory.")
-    parser.add_argument("--save_model", default=False,
+    parser.add_argument("--save_model", default=True,
         help="Whether to save the trained model.")
     args = parser.parse_args()
 
