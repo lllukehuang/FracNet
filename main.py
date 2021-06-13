@@ -76,14 +76,22 @@ if __name__ == "__main__":
 
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--train_image_dir", default='../../input/mlimg',
-        help="The training image nii directory.")
-    parser.add_argument("--train_label_dir", default='../../input/mllabel',
-        help="The training label nii directory.")
-    parser.add_argument("--val_image_dir", default='../../input/mlvalimg',
-        help="The validation image nii directory.")
-    parser.add_argument("--val_label_dir", default='../../input/mlvallabel',
-        help="The validation label nii directory.")
+    # parser.add_argument("--train_image_dir", default='../../input/mlimg',
+    #     help="The training image nii directory.")
+    # parser.add_argument("--train_label_dir", default='../../input/mllabel',
+    #     help="The training label nii directory.")
+    # parser.add_argument("--val_image_dir", default='../../input/mlvalimg',
+    #     help="The validation image nii directory.")
+    # parser.add_argument("--val_label_dir", default='../../input/mlvallabel',
+    #     help="The validation label nii directory.")
+    parser.add_argument("--train_image_dir", default='dataset/mlimg',
+                        help="The training image nii directory.")
+    parser.add_argument("--train_label_dir", default='dataset/mllabel',
+                        help="The training label nii directory.")
+    parser.add_argument("--val_image_dir", default='dataset/mlvalimg',
+                        help="The validation image nii directory.")
+    parser.add_argument("--val_label_dir", default='dataset/mlvallabel',
+                        help="The validation label nii directory.")
     parser.add_argument("--save_model", default=False,
         help="Whether to save the trained model.")
     args = parser.parse_args()
