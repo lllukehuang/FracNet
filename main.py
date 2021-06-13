@@ -76,13 +76,13 @@ if __name__ == "__main__":
 
 
     parser = argparse.ArgumentParser()
-    parser.add_argument("--train_image_dir", default='../input/mlimg',
+    parser.add_argument("--train_image_dir", default='/kaggle/input/mlimg',
         help="The training image nii directory.")
-    parser.add_argument("--train_label_dir", default='../input/mllabel',
+    parser.add_argument("--train_label_dir", default='/kaggle/input/mllabel',
         help="The training label nii directory.")
-    parser.add_argument("--val_image_dir", default='../input/mlvalimg',
+    parser.add_argument("--val_image_dir", default='/kaggle/input/mlvalimg',
         help="The validation image nii directory.")
-    parser.add_argument("--val_label_dir", default='../input/mlvallabel',
+    parser.add_argument("--val_label_dir", default='/kaggle/input/mlvallabel',
         help="The validation label nii directory.")
     # parser.add_argument("--train_image_dir", default='dataset/mlimg',
     #                     help="The training image nii directory.")
