@@ -11,13 +11,14 @@ from torch.utils.data import DataLoader, Dataset
 class FracNetTrainDataset(Dataset):
 
     def __init__(self, image_dir, label_dir=None, crop_size=64,
-            transforms=None, num_samples=4, train=True):
+            transforms=None, num_samples=4, train=True, my_transforms=None):
         self.image_dir = image_dir
         self.label_dir = label_dir
         self.public_id_list = sorted([x.split("-")[0]
             for x in os.listdir(image_dir)])
         self.crop_size = crop_size
         self.transforms = transforms
+        self.my_transforms = my_transforms
         self.num_samples = num_samples
         self.train = train
 
@@ -151,6 +152,29 @@ class FracNetTrainDataset(Dataset):
         if self.transforms is not None:
             image_rois = [self._apply_transforms(image_roi)
                 for image_roi in image_rois]
+
+        # img_rois_ = torch.FloatTensor(image_rois).unsqueeze(0)
+        # lab_rois_ = torch.FloatTensor(label_rois).unsqueeze(0)
+        # print(np.array(image_rois).shape) # 4*64*64*64
+        # print(np.array(label_rois).shape)
+
+        if self.my_transforms is not None:
+            total_length = len(roi_centroids)
+            for i in range(total_length):
+                image_roi = image_rois[i]
+                label_roi = label_rois[i]
+                img_roi_ = torch.FloatTensor(image_roi).unsqueeze(0) # 1*4*64*64*64
+                lab_roi_ = torch.FloatTensor(label_roi).unsqueeze(0)
+                img_roi_, lab_roi_ = self.my_transforms(img_roi_,lab_roi_)
+                img_roi_ = img_roi_.squeeze(0)
+                lab_roi_ = lab_roi_.squeeze(0)
+                img_roi_ = img_roi_.numpy().tolist()
+                lab_roi_ = lab_roi_.numpy().tolist()
+                image_rois[i] = img_roi_
+                label_rois[i] = lab_roi_
+
+        # print(np.array(image_rois).shape)
+        # print(np.array(label_rois).shape)
 
         image_rois = torch.tensor(np.stack(image_rois)[:, np.newaxis],
             dtype=torch.float)
