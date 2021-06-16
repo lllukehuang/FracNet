@@ -7,7 +7,7 @@ from fastai.data_block import DataBunch
 from torch import optim
 
 from dataset.fracnet_dataset import FracNetTrainDataset
-from dataset import transforms as tsfm
+from dataset import my_transforms as tsfm
 from utils.metrics import dice, recall, precision, fbeta_score
 from model.unet import UNet
 from model.losses import MixLoss, DiceLoss

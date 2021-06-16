@@ -11,7 +11,7 @@ from skimage.morphology import disk, remove_small_objects
 from tqdm import tqdm
 
 from dataset.fracnet_dataset import FracNetInferenceDataset
-from dataset import transforms as tsfm
+from dataset import my_transforms as tsfm
 from model.unet import UNet
 
 
@@ -74,7 +74,8 @@ def _predict_single_image(model, dataloader, postprocess, prob_thresh,
     with torch.no_grad():
         for _, sample in enumerate(dataloader):
             images, centers = sample
-            images = images.cuda()
+            # images = images.cuda()
+            images = images.to("cuda:0")
             output = model(images).sigmoid().cpu().numpy().squeeze(axis=1)
 
             for i in range(len(centers)):
@@ -117,7 +118,7 @@ def _make_submission_files(pred, image_id, affine):
 
 
 def predict(args):
-    batch_size = 16
+    batch_size = 64
     num_workers = 4
     postprocess = True if args.postprocess == "True" else False
 
@@ -126,7 +127,8 @@ def predict(args):
     if args.model_path is not None:
         model_weights = torch.load(args.model_path)
         model.load_state_dict(model_weights)
-    model = nn.DataParallel(model).cuda()
+    # model = nn.DataParallel(model).cuda()
+    model = nn.DataParallel(model,device_ids=[0]).to("cuda:0")
 
     transforms = [
         tsfm.Window(-200, 1000),
@@ -149,13 +151,13 @@ def predict(args):
         pred_image, pred_info = _make_submission_files(pred_arr, image_id,
             dataset.image_affine)
         pred_info_list.append(pred_info)
-        pred_path = os.path.join(args.pred_dir, f"{image_id}_pred.nii.gz")
+        pred_path = os.path.join(args.pred_dir, f"{image_id}-label.nii.gz")
         nib.save(pred_image, pred_path)
 
         progress.update()
 
     pred_info = pd.concat(pred_info_list, ignore_index=True)
-    pred_info.to_csv(os.path.join(args.pred_dir, "pred_info.csv"),
+    pred_info.to_csv(os.path.join(args.pred_dir, "ribfrac-test-pred.csv"),
         index=False)
 
 
@@ -174,11 +176,11 @@ if __name__ == "__main__":
     #     help="The directory for saving predictions.")
     # parser.add_argument("--model_path", default=None,
     #     help="The PyTorch model weight path.")
-    parser.add_argument("--image_dir", default= '/kaggle/input/mlimg',
+    parser.add_argument("--image_dir", default= '../ML2021/dataset/test/ct',
                         help="The image nii directory.")
-    parser.add_argument("--pred_dir", default='/kaggle/working/pred',
+    parser.add_argument("--pred_dir", default='mySGDlabel',
                         help="The directory for saving predictions.")
-    parser.add_argument("--model_path", default='model_weights.pth',
+    parser.add_argument("--model_path", default='aug_model_weights.pth',
                         help="The PyTorch model weight path.")
     parser.add_argument("--prob_thresh", default=0.1,
         help="Prediction probability threshold.")
